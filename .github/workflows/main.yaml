@@ -1,0 +1,43 @@
+name: Run TypeScript on push or PR merge
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]' && github.actor != 'github-actions[bot]'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+
+      - name: Setup Node 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install deps
+        run: pnpm install --no-frozen-lockfile --prefer-offline
+
+      - name: Run
+        run: pnpm generate:new
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global --add --bool push.autoSetupRemote true
+          echo "Committing changes and pushing to ${{ github.ref_name }}"
+          git diff --quiet && git diff --staged --quiet || git commit -am "${{ github.ref_name }}: Update generated files" && git push -u origin ${{ github.ref_name }} && echo "Pushed changes to ${{ github.ref_name }}"
+          echo "Done"

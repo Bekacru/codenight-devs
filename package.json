@@ -1,0 +1,25 @@
+{
+  "name": "scripts",
+  "packageManager": "pnpm@7.9.5",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "generate:new": "ts-node scripts/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.10.7",
+    "ncc": "^0.3.6",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@actions/github": "^6.0.0",
+    "isomorphic-git": "^1.25.3",
+    "simple-git": "^3.22.0",
+    "ts-node": "^10.9.2"
+  }
+}
